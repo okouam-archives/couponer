@@ -1,6 +1,9 @@
-﻿namespace Couponer.Tests.Services
+﻿using NUnit.Framework;
+
+namespace Couponer.Tests.Services
 {
-    class WordpressApi
+    [TestFixture]
+    class WordpressApiTests
     {
     }
 }
