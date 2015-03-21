@@ -4,7 +4,7 @@ namespace Couponer.Tasks
     {
         bool IsPopulated { get; }
 
-        void Populate(IWordpressApi api);
+        void Populate();
 
         bool Contains(string uniqueId, string source);
     }

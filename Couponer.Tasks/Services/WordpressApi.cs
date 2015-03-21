@@ -21,11 +21,6 @@ namespace Couponer.Tasks
 
         /* Public Methods. */
 
-        public Post[] GetPosts(int number = 10000)
-        {
-            return wpClient.GetPosts(new PostFilter { Number = number });
-        }
-
         public IEnumerable<Term> RetrieveTerms(int number = 10000)
         {
             return wpClient.GetTerms("category", new TermFilter { Number = number });

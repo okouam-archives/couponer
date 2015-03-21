@@ -11,35 +11,16 @@ namespace Couponer.Tasks.Domain
     {
         /* Public Methods. */
 
-        public void Save(IDailyOfferCache cache, ITaxonomyService taxonomyService, IWordpressApi api, params DailyOffer[] offers)
+        public void Save(IDailyOfferCache dailyOfferCache, ITaxonomyCache taxonomyCache, IWordpressApi api, params DailyOffer[] offers)
         {
             foreach (var offer in offers)
             {
-                if (!cache.Contains(offer.UniqueId, offer.Source))
+                if (!dailyOfferCache.Contains(offer.UniqueId, offer.Source))
                 {
-                    var terms = new List<Term>();
+                    var terms = GetTerms(taxonomyCache, offer);
 
-                    if (offer.Geographies != null && offer.Geographies.Any())
-                    {
-                        terms.AddRange(taxonomyService.NewGeographies(offer.Geographies, api));
-                    }
+                    CreatePost(api, offer, terms);
 
-                    if (offer.Products != null && offer.Products.Any())
-                    {
-                        terms.AddRange(taxonomyService.NewProducts(offer.Products, api));
-                    }
-
-                    var post = new Post
-                               {
-                                   Name = offer.Name,
-                                   Title = offer.Name,
-                                   Status = "publish",
-                                   Content = offer.Description,
-                                   CustomFields = GetCustomFields(offer).ToArray(),
-                                   Terms = terms.ToArray()
-                               };
-
-                    api.CreatePost(post);
                     log.DebugFormat("Created daily offer with ID <{0}> for merchant <{1}>.", offer.UniqueId, offer.Merchant);
                 }
                 else
@@ -52,8 +33,45 @@ namespace Couponer.Tasks.Domain
 
         /* Private. */
 
+        private static void CreatePost(IWordpressApi api, DailyOffer offer, List<Term> terms)
+        {
+            var post = new Post
+            {
+                Name = offer.Name,
+                Title = offer.Name,
+                Status = "publish",
+                Content = offer.Description,
+                CustomFields = GetCustomFields(offer).ToArray(),
+                Terms = terms.ToArray()
+            };
+
+            api.CreatePost(post);
+        }
+
+        private static List<Term> GetTerms(ITaxonomyCache taxonomyCache, DailyOffer offer)
+        {
+            var terms = new List<Term>();
+
+            if (offer.Geographies != null && offer.Geographies.Any())
+            {
+                terms.AddRange(offer.Geographies.Select(x => taxonomyCache.Get("geography", x)));
+            }
+
+            if (offer.Products != null && offer.Products.Any())
+            {
+                terms.AddRange(offer.Products.Select(x => taxonomyCache.Get("product", x)));
+            }
+
+            return terms;
+        }
+
         private static IEnumerable<CustomField> GetCustomFields(DailyOffer dailyOffer)
         {
+            if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "spec", Value = dailyOffer.Spec };
+            if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "warranty", Value = dailyOffer.Warranty };
+            if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "promo", Value = dailyOffer.Promo };
+            if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "description", Value = dailyOffer.Description };
+            if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "name", Value = dailyOffer.Name };
             if (!String.IsNullOrEmpty(dailyOffer.Source)) yield return new CustomField { Key = "source", Value = dailyOffer.Source };
             if (!String.IsNullOrEmpty(dailyOffer.UniqueId)) yield return new CustomField {Key = "uniqueid", Value = dailyOffer.UniqueId};
             if (!String.IsNullOrEmpty(dailyOffer.FinePrint)) yield return new CustomField {Key = "finePrint", Value = dailyOffer.FinePrint};

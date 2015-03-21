@@ -34,6 +34,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.39\lib\net45\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -49,6 +52,10 @@
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.3.1.4.143\lib\net40\StructureMap.dll</HintPath>
     </Reference>
@@ -56,6 +63,7 @@
       <HintPath>..\packages\structuremap.3.1.4.143\lib\net40\StructureMap.Net4.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions">
@@ -79,18 +87,17 @@
     <Compile Include="Interfaces\IDailyOfferCache.cs" />
     <Compile Include="Interfaces\IDatabase.cs" />
     <Compile Include="Interfaces\IDataFeed.cs" />
-    <Compile Include="Interfaces\ITaxonomyService.cs" />
     <Compile Include="Interfaces\IWordpressApi.cs" />
     <Compile Include="Interfaces\ITaxonomyCache.cs" />
-    <Compile Include="Providers\ShopWindow\Parser.cs" />
+    <Compile Include="Services\Parser.cs" />
     <Compile Include="Domain\Shop.cs" />
     <Compile Include="Services\DailyOfferCache.cs" />
-    <Compile Include="Providers\Amazon\Amazon.cs" />
+    <Compile Include="Providers\Amazon\Provider.cs" />
+    <Compile Include="Utility\Config.cs" />
     <Compile Include="Utility\LinqExtensions.cs" />
     <Compile Include="Providers\ShopWindow\Provider.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\TaxonomyCache.cs" />
-    <Compile Include="Services\TaxonomyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\WordpressApi.cs" />
     <Compile Include="Utility\Logger.cs" />

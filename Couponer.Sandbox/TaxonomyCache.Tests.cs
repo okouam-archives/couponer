@@ -12,7 +12,7 @@ namespace Couponer.Sandbox
         public void When_populating_gets_all_terms()
         {
             var container = new Container(new ServiceLocator());
-            new TaxonomyCache().Populate(container.GetInstance<WordpressApi>());
+            new TaxonomyCache().Populate(container.GetInstance<WordpressApi>(), null);
         }
     }
 }

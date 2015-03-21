@@ -1,7 +1,9 @@
-﻿namespace Couponer.Tasks
+﻿using Couponer.Tasks.Providers.ShopWindow;
+
+namespace Couponer.Tasks
 {
     public interface IDataFeed
     {
-        string Download(string url);
+        string Download(MERCHANTS url);
     }
 }

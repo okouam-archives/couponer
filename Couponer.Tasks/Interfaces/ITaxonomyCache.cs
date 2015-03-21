@@ -6,12 +6,8 @@ namespace Couponer.Tasks.Domain
     {
         bool IsPopulated { get; }
 
-        void Populate(IWordpressApi api);
-
-        string FindParent(string name);
+        void Populate(IWordpressApi api, string file);
 
         Term Get(string parentId, string term);
-
-        void Add(string parentId, Term term);
     }
 }

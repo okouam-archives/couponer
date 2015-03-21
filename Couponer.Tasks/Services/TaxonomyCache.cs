@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
+using Couponer.Tasks.Providers.ShopWindow;
 using Couponer.Tasks.Utility;
+using Dapper;
+using MySql.Data.MySqlClient;
 using WordPressSharp.Models;
 
 namespace Couponer.Tasks.Domain
@@ -17,54 +21,68 @@ namespace Couponer.Tasks.Domain
 
         /* Public Methods. */
 
-        public void Populate(IWordpressApi api)
+        public void Populate(IWordpressApi api, string file)
         {
             log.Debug("Populating the taxonomy cache.");
 
-            var terms = api.RetrieveTerms();
-
-            Refresh("geography", terms, api);
-            Refresh("product", terms, api);
-
-            var parents = new List<String> {FindParent("geography"), FindParent("product")};
-            
-            foreach (var term in terms.Where(term => parents.Contains(term.Parent)))
+            var geography = EnsureTaxonomyExists("geography", api, file, (doc, parent) =>
             {
-                taxonomy.First(x => x.Key.Id == term.Parent).Value.Add(term);
-            }
+                return Enumerable.Empty<Term>();
+            });
 
-            log.DebugFormat("The taxonomy cache has been populated with {0} terms.", terms.Count());
-        }
+            var productCategory = EnsureTaxonomyExists("product", api, file, (doc, parent) =>
+            {
+                return from product in doc.Descendants("prod")
+                where product.Attribute("in_stock").Value == "yes"
+                select new Term {Parent  = parent.Id, Taxonomy = "category", Name = Parser.GetChild(product, "awCat").Replace("&", "and")};
+            });
 
-        public string FindParent(string name)
-        {
-            return taxonomy.Keys.First(x => x.Name == name).Id;
+            log.DebugFormat("The taxonomy cache has been populated with {0} terms.", taxonomy[geography].Count() + taxonomy[productCategory].Count());
         }
 
         public Term Get(string parentId, string term)
         {
-            var parent = GetParent(parentId);
+            var parent = taxonomy.Keys.First(x => x.Name == parentId);
             return taxonomy[parent].FirstOrDefault(x => x.Name == term);
-        }
-
-        public void Add(string parentId, Term term)
-        {
-            taxonomy.First(x => x.Key.Id == parentId).Value.Add(term);
         }
 
         /* Private. */
 
-        private Term GetParent(string parentId)
+        private Term EnsureTaxonomyExists(string name, IWordpressApi api, string file, Func<XDocument, Term, IEnumerable<Term>> callback)
         {
-            var parent = taxonomy.Keys.First(x => x.Id == parentId);
+            var parent = Refresh(name, api);
+            taxonomy.Add(parent, new List<Term>());
+            taxonomy[parent].AddRange(callback(XDocument.Load(file), parent));
+            EnsureDatabaseEquivalency(taxonomy[parent], api);
             return parent;
         }
 
-        private void Refresh(string name, IEnumerable<Term> availableTerms, IWordpressApi api)
+        private void EnsureDatabaseEquivalency(IEnumerable<Term> terms, IWordpressApi api)
         {
-            var term = availableTerms.FirstOrDefault(x => x.Name == name);
+            foreach (var term in terms)
+            {
+                var id = GetTermId(term) ?? CreateTerm(term, api);
+                term.Id = id;
+            }
+        }
+
+        string CreateTerm(Term term, IWordpressApi api)
+        {
+            return api.CreateTerm(term.Name, term.Parent);
+        }
+
+        string GetTermId(Term term)
+        {
+            var connection = new MySqlConnection(Config.DB_CONNECTION_STRING);
+            return connection.Query<string>("SELECT term_id FROM wp_terms WHERE name = '" + term.Name.Replace("'", "''") + "'").FirstOrDefault();
+        }
+
+        private Term Refresh(string name, IWordpressApi api)
+        {
+            var terms = api.RetrieveTerms();
+            var term = terms.FirstOrDefault(x => x.Name == name);
             var id = term != null ? term.Id : api.CreateTerm(name);
-            taxonomy.Add(new Term {Id = id, Name =  name}, new List<Term>());
+            return new Term {Id = id, Name = name, Taxonomy = "category"};
         }
 
         private readonly Dictionary<Term, List<Term>> taxonomy = new Dictionary<Term, List<Term>>(); 

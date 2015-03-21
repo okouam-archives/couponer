@@ -5,6 +5,10 @@ namespace Couponer.Tasks.Domain
 {
     public class DailyOffer
     {
+        public string Spec { get; set; }
+
+        public string Warranty { get; set; }
+
         public string Name { get; set; }
 
         public string Source { get; set; }
@@ -25,12 +29,24 @@ namespace Couponer.Tasks.Domain
 
         public string Price { get; set; }
 
+        public string Currency { get; set; }
+
         public string PurchaseUrl { get; set; }
 
         public string Value { get; set; }
 
         public IEnumerable<String> Geographies { get; set; } 
 
-        public IEnumerable<String> Products { get; set; } 
+        public IEnumerable<String> Products { get; set; }
+
+        public string Promo { get; set; }
+
+        public string Delivery { get; set; }
+
+        public string RRP { get; set; }
+
+        public string Store { get; set; }
+
+        public string BuyNow { get; set; }
     }
 }

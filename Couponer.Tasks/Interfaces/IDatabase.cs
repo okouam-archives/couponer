@@ -2,6 +2,6 @@
 {
     public interface IDatabase
     {
-        void Save(IDailyOfferCache cache, ITaxonomyService taxonomyService, IWordpressApi api, params DailyOffer[] offers);
+        void Save(IDailyOfferCache dailyOfferCache, ITaxonomyCache taxonomyCache, IWordpressApi api, params DailyOffer[] offers);
     }
 }

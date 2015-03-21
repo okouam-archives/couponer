@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Couponer.Tasks.Utility;
+using Dapper;
 using log4net;
+using MySql.Data.MySqlClient;
 
 namespace Couponer.Tasks
 {
@@ -12,31 +16,24 @@ namespace Couponer.Tasks
             get { return existingOfferIds != null && existingOfferIds.Any(); }
         }
 
-        public void Populate(IWordpressApi api)
+        /* Public Methods. */
+
+        public void Populate()
         {
             log.Debug("Populating the daily offer cache.");
 
-            var posts = api.GetPosts();
-
-            var merchants = posts
-                .Where(post => post.CustomFields != null && post.CustomFields.Any(x => x.Key == "source"))
-                .Select(post => post.CustomFields.First(x => x.Key == "source").Value)
-                .Distinct();
+            var posts = GetFromDatabase().ToList();
 
             existingOfferIds = new Dictionary<string, List<string>>();
 
-            var counter = 0;
-
-            foreach (var merchant in merchants)
+            foreach (var post in posts)
             {
-                var offerIds = posts
-                    .Where(post => post.CustomFields.Any(x => x.Key == "source" && x.Value == merchant))
-                    .Select(post => post.CustomFields.First(x => x.Key == "uniqueid").Value)
-                    .ToList();
+                if (!existingOfferIds.ContainsKey(post.Key))
+                {
+                    existingOfferIds.Add(post.Key, new List<string>());
+                }
 
-                existingOfferIds.Add(merchant, offerIds);
-
-                counter = counter + offerIds.Count;
+                existingOfferIds[post.Key].Add(post.Value);
             }
 
             log.DebugFormat("Finished populating the daily offer cache with {0} offers.", posts.Count());
@@ -44,9 +41,25 @@ namespace Couponer.Tasks
 
         public bool Contains(string uniqueId, string source)
         {
+            if (existingOfferIds == null) return false;
+            
             return existingOfferIds.ContainsKey(source) && existingOfferIds[source].Contains(uniqueId);
         }
 
+        /* Private. */
+
+        private IEnumerable<KeyValuePair<string, string>> GetFromDatabase()
+        {
+            var connection = new MySqlConnection(Config.DB_CONNECTION_STRING);
+            var sources = connection.Query<dynamic>("SELECT DISTINCT post_id, meta_value FROM wp_postmeta WHERE meta_key = 'source'");
+            var uniqueids = connection.Query<dynamic>("SELECT DISTINCT post_id, meta_value FROM wp_postmeta WHERE meta_key = 'uniqueid'");
+
+            return from source in sources 
+                   let uniqueid = uniqueids.FirstOrDefault(x => x.post_id == source.post_id) 
+                   where uniqueid != null 
+                   select new KeyValuePair<string, string>(source.meta_value, uniqueid.meta_value);
+        }
+        
         private Dictionary<string, List<string>> existingOfferIds; 
     }
 }

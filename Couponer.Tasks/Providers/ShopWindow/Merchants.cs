@@ -2,10 +2,10 @@
 {
     public enum MERCHANTS
     {
-        WOWCHER = 3596,
+        WOWCHER = 3595,
         KGB = 2965,
         LIVING_SOCIAL = 3925,
         MIGHTY_DEALS = 4264,
-        GROUPON = 2891
+        //GROUPON = 2891
     }
 }
