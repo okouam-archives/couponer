@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Couponer.Tests", "Couponer.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Couponer.Sandbox", "Couponer.Sandbox\Couponer.Sandbox.csproj", "{D2A252C7-6FA9-48DA-B9C8-F93638F9EF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPressSharp", "WordPressSharp\WordPressSharp.csproj", "{7A938355-0B6B-48B7-97FB-C0C09015307B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Couponer.Daemon", "Couponer.Daemon\Couponer.Daemon.csproj", "{92410BE6-8B77-4A8B-8FD6-C787F775ED88}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{D2A252C7-6FA9-48DA-B9C8-F93638F9EF1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A252C7-6FA9-48DA-B9C8-F93638F9EF1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2A252C7-6FA9-48DA-B9C8-F93638F9EF1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A938355-0B6B-48B7-97FB-C0C09015307B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A938355-0B6B-48B7-97FB-C0C09015307B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A938355-0B6B-48B7-97FB-C0C09015307B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A938355-0B6B-48B7-97FB-C0C09015307B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92410BE6-8B77-4A8B-8FD6-C787F775ED88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92410BE6-8B77-4A8B-8FD6-C787F775ED88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92410BE6-8B77-4A8B-8FD6-C787F775ED88}.Release|Any CPU.ActiveCfg = Release|Any CPU

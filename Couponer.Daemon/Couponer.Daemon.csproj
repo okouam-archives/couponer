@@ -59,10 +59,6 @@
       <Project>{b78246c0-8107-4acc-bd61-6c45b3c56a47}</Project>
       <Name>Couponer.Tasks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WordPressSharp\WordPressSharp.csproj">
-      <Project>{7a938355-0b6b-48b7-97fb-c0c09015307b}</Project>
-      <Name>WordPressSharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

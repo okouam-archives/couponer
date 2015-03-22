@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using CookComputing.XmlRpc;
+﻿using XmlRpcLight.Attributes;
+using XmlRpcLight.Enums;
 
 namespace WordPressSharp
 {

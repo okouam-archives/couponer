@@ -5,11 +5,14 @@ namespace Couponer.Tasks.Domain
 {
     public class DailyOffer
     {
+        public string DatabaseIdentifier
+        {
+            get { return Source + "-" + UniqueId; }
+        }
+
         public string Spec { get; set; }
 
         public string Warranty { get; set; }
-
-        public string Name { get; set; }
 
         public string Source { get; set; }
 
@@ -48,5 +51,7 @@ namespace Couponer.Tasks.Domain
         public string Store { get; set; }
 
         public string BuyNow { get; set; }
+
+        public string Title { get; set; }
     }
 }

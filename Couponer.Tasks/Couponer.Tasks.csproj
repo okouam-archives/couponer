@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="Dapper">
       <HintPath>..\packages\Dapper.1.39\lib\net45\Dapper.dll</HintPath>
     </Reference>
@@ -43,18 +39,21 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="LogentriesCore">
-      <HintPath>..\packages\logentries.core.2.6.7\lib\net40\LogentriesCore.dll</HintPath>
-    </Reference>
-    <Reference Include="LogentriesLog4net">
-      <HintPath>..\packages\logentries.log4net.2.6.3\lib\net40\LogentriesLog4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Slugify">
+      <HintPath>..\packages\Slugify.0.1.0.20570\lib\net40\Slugify.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.3.1.4.143\lib\net40\StructureMap.dll</HintPath>
@@ -80,33 +79,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Providers\ShopWindow\Merchants.cs" />
-    <Compile Include="Services\DataFeed.cs" />
+    <Compile Include="Domain\CustomField.cs" />
+    <Compile Include="Domain\Post.cs" />
+    <Compile Include="Domain\Term.cs" />
+    <Compile Include="Providers\Amazon\DataFeed.cs" />
+    <Compile Include="Providers\Amazon\Parser.cs" />
+    <Compile Include="Providers\MERCHANT.cs" />
+    <Compile Include="Providers\ShopWindow\DataFeed.cs" />
     <Compile Include="Domain\DailyOffer.cs" />
+    <Compile Include="Services\AbstractDataFeed.cs" />
+    <Compile Include="Services\AbstractProvider.cs" />
     <Compile Include="Services\Database.cs" />
-    <Compile Include="Interfaces\IDailyOfferCache.cs" />
-    <Compile Include="Interfaces\IDatabase.cs" />
-    <Compile Include="Interfaces\IDataFeed.cs" />
-    <Compile Include="Interfaces\IWordpressApi.cs" />
-    <Compile Include="Interfaces\ITaxonomyCache.cs" />
-    <Compile Include="Services\Parser.cs" />
+    <Compile Include="Providers\ShopWindow\Parser.cs" />
     <Compile Include="Domain\Shop.cs" />
-    <Compile Include="Services\DailyOfferCache.cs" />
     <Compile Include="Providers\Amazon\Provider.cs" />
+    <Compile Include="Services\Parser.cs" />
     <Compile Include="Utility\Config.cs" />
     <Compile Include="Utility\LinqExtensions.cs" />
     <Compile Include="Providers\ShopWindow\Provider.cs" />
-    <Compile Include="Services\ServiceLocator.cs" />
-    <Compile Include="Services\TaxonomyCache.cs" />
+    <Compile Include="Services\TaxonomyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\WordpressApi.cs" />
     <Compile Include="Utility\Logger.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WordPressSharp\WordPressSharp.csproj">
-      <Project>{7a938355-0b6b-48b7-97fb-c0c09015307b}</Project>
-      <Name>WordPressSharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

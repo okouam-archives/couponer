@@ -33,6 +33,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,9 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Amazon.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShopWindow.Tests.cs" />
-    <Compile Include="TaxonomyCache.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -63,10 +67,6 @@
     <ProjectReference Include="..\Couponer.Tasks\Couponer.Tasks.csproj">
       <Project>{B78246C0-8107-4ACC-BD61-6C45B3C56A47}</Project>
       <Name>Couponer.Tasks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WordPressSharp\WordPressSharp.csproj">
-      <Project>{7a938355-0b6b-48b7-97fb-c0c09015307b}</Project>
-      <Name>WordPressSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

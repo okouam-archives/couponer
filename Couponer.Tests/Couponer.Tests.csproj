@@ -50,12 +50,12 @@
     <Compile Include="Services\WordpressApi.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Fixtures\" />
     <Folder Include="Providers\Amazon\" />
     <Folder Include="Providers\ShopWindow\" />
     <Folder Include="Utility\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Fixtures\Amazon.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
