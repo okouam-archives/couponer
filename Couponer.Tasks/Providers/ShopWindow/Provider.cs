@@ -25,9 +25,9 @@ namespace Couponer.Tasks.Providers.ShopWindow
 
         public static void GetDeals(MERCHANTS merchant, Container container)
         {
-            log.DebugFormat("Download feed for <{0}>.", merchant);
+            log.DebugFormat("Downloading feed for <{0}>.", merchant);
             var file = container.GetInstance<IDataFeed>().Download(merchant);
-            Console.WriteLine(file);
+            log.DebugFormat("Downloaded feed for <{0}> to <{1}>.", merchant, file);
             GetDeals(merchant, container, file);
         }
 
