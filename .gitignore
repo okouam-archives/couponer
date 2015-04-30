@@ -12,6 +12,8 @@ obj/
 *.user
 *.sln.docstates
 
+Wordpress
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
