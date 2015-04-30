@@ -1,11 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
 using Couponer.Tasks.Providers.ShopWindow;
 using Couponer.Tasks.Services;
 using Couponer.Tasks.Utility;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.GZip;
 
 namespace Couponer.Tasks
 {

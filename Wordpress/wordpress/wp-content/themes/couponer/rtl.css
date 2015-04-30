@@ -1,0 +1,197 @@
+/*RTL SUPPORTS CSS */
+
+body {
+  direction: rtl;
+  unicode-bidi: embed;
+}
+
+.featured-item-container {
+  float: right;
+}
+.nav {
+  padding-right: 0;
+}
+.navbar-collapse ul.navbar-nav li a {
+  text-align: right;
+}
+.navbar-collapse ul.dd-custom li a i,
+.navbar-collapse ul.dd-custom li a i {
+  padding-right: 0;
+  padding-left: 13px;
+}
+.navbar-collapse ul.dd-custom li a i.fa-tags,
+.navbar-collapse ul.dd-custom li a i.fa-tags {
+  padding-right: 0;
+  padding-left: 8px;
+}
+.ajax_search_results ul {
+  text-align: right;
+}
+.form-horizontal .form-group input[type='text'] {
+  padding-right: 54px;
+}
+.form-horizontal .has-feedback .form-control-feedback {
+  right: auto;
+  left: 15px;
+}
+.form-horizontal .has-feedback .form-control-feedback.fa-search {
+  right: 15px;
+  left: auto;
+}
+button.btn.btn-categories.btn-default.btn-default.btn-lg.dropdown-toggle.form-control {
+  text-align: right;
+}
+button.btn.btn-categories.btn-default.btn-default.btn-lg.dropdown-toggle.form-control span.fa.fa-angle-down.pull-right.categories-angle-icon {
+  float: left !important;
+}
+.btn-categories span.btn-left-icon {
+  padding-left: 12px;
+}
+.btn-group.btn-categories.open ul {
+  text-align: right;
+}
+.btn-categories ul li a i {
+  padding-left: 12px;
+}
+.nav-tabs > li {
+  float: right;
+}
+.filter-tabs ul.nav-tabs li {
+  margin-right: 0;
+  margin-left: 1px;
+}
+.filter-tabs ul.nav-tabs li a {
+  text-align: right;
+}
+.filter-tabs ul.nav-tabs li a i {
+  float: left !important;
+}
+.list-inline,
+.list-unstyled {
+  padding-right: 0;
+}
+.item-meta ul li a span {
+  padding-right: 0;
+  padding-left: 3px;
+}
+.footer-caption h3 {
+  text-align: right;
+}
+.footer_widget form {
+  padding-right: 0;
+}
+.footer_widget .widget-content {
+  padding-right: 0;
+}
+.footer .widget ul {
+  padding-right: 0;
+}
+.footer_widget .badge {
+  float: left;
+}
+.single-letter h3 {
+  text-align: right;
+}
+.to-top a {
+  float: left !important;
+}
+.modal-caption h3 {
+  text-align: right;
+}
+.list-group-item > .badge {
+  float: left;
+}
+.widget .widget-inner ul {
+  padding-right: 0;
+}
+.right_widget .widget-inner .social ul.soc-icons {
+  padding-right: 20px;
+  padding-left: 0;
+}
+.newsletter p {
+  text-align: right;
+}
+.contact-caption h2,
+.contact-caption h3 {
+  text-align: right;
+}
+.main_content h1,
+.main_content h2,
+.main_content h3,
+.main_content h4,
+.main_content h5,
+.main_content p {
+  text-align: right !important;
+}
+.blog-meta ul li:last-child a span {
+  padding-right: 0;
+  padding-left: 5px;
+}
+.blog-caption h3 {
+  text-align: right;
+}
+.blog-pagination ul li a {
+  margin-right: 0;
+  margin-left: 1px;
+}
+.widget .widget-inner .widget-content .dropdown button {
+  text-align: right;
+}
+.widget .widget-inner .widget-content .dropdown button span {
+  float: left !important;
+}
+ul.dd-custom li a i {
+  padding-right: 0;
+  padding-left: 12px;
+}
+.ssba div {
+  text-align: right !important;
+}
+.media .comment-inner a {
+  float: right !important;
+}
+ul.children {
+  padding-right: 0;
+  padding-left: 20px;
+}
+.comment-caption h3 {
+  text-align: right;
+}
+.comment-body p {
+  clear: both;
+}
+.media > .pull-left {
+  float: right !important;
+}
+.profile-intro .media.profile-media a {
+  float: right !important;
+}
+.media > .pull-left {
+  margin-right: 0;
+  margin-left: 10px;
+}
+.profile-tabs ul.vertical-tabs li a i {
+  margin-right: 0;
+  margin-left: 10px;
+}
+.avatar-delete {
+  right: 65px;
+  left: auto;
+}
+.btn-group > .btn,
+.btn-group-vertical > .btn {
+  float: right;
+}
+.btn-group > .btn:first-child {
+  margin-right: 0;
+}
+.dropdown.dd-widget button {
+  text-align: right;
+}
+.widget.footer_widget button.dropdown-toggle.btn span {
+  float: left !important;
+}
+.modal-header div img,
+.modal-body div img {
+  float: left;
+}

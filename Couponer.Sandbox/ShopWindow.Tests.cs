@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using Couponer.Tasks.Domain;
 using Couponer.Tasks.Providers.ShopWindow;
+using Couponer.Tasks.Services;
 using NUnit.Framework;
 
 namespace Couponer.Sandbox
@@ -12,17 +13,11 @@ namespace Couponer.Sandbox
         public void Sandbox()
         {
             log4net.Config.XmlConfigurator.Configure();
-            ThreadPool.SetMinThreads(10, 10);
-            TaxonomyService.Initialize();
-            Provider.GetDeals();
+            PostCreationService.Clear();
+            TaxonomyCreationService.Clear();
+            TaxonomyCreationService.Initialize();
+            var user = UserCreationService.CreateOrUpdate("couponer", "$P$BWJW/XnJo3sQg6CNqsrt1zHYMo4H7b1");
+            Provider.GetDeals(user);
         }
     }
 }
-
-/* 
- DELETE FROM `wordpress813`.`wp_posts` WHERE ID > 0;
- DELETE FROM `wordpress813`.`wp_terms` WHERE term_id > 1;
- DELETE FROM `wordpress813`.`wp_term_taxonomy` WHERE term_taxonomy_id > 0;
- DELETE FROM `wordpress813`.`wp_term_relationships` WHERE object_id > 0;
- DELETE FROM `wordpress813`.`wp_postmeta` WHERE meta_id > 0;
-*/

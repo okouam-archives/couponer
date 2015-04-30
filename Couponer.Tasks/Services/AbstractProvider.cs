@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Couponer.Tasks.Data;
 using Couponer.Tasks.Domain;
 using Couponer.Tasks.Providers;
 using Couponer.Tasks.Providers.ShopWindow;
@@ -11,8 +12,11 @@ namespace Couponer.Tasks.Services
 {
     class AbstractProvider
     {
+        /* Public Methods. */
+
         public static String Execute(
             MERCHANT merchant, 
+            wp_user user,
             Func<MERCHANT, string> getDataFeed, 
             Func<string, MERCHANT, IEnumerable<DailyOffer>> getOffers,
             Func<string, MERCHANT, IEnumerable<Shop>> getShops = null)
@@ -21,55 +25,60 @@ namespace Couponer.Tasks.Services
 
             if (getShops != null)
             {
-                SaveShops(merchant, getShops, file);
+                SaveShops(user, merchant, getShops, file);
             }
 
             if (getOffers != null)
             {
-                SaveOffers(merchant, getOffers, file);
+                SaveOffers(user, merchant, getOffers, file);
             }
 
             return file;
         }
         
-        private static void SaveOffers(IEnumerable<DailyOffer> dailyOffers, MERCHANT merchant)
+        /* Private. */
+
+        private static void SaveOffers(wp_user user, IEnumerable<DailyOffer> dailyOffers, MERCHANT merchant)
         {
             log.DebugFormat("Saving deals for <{0}>.", merchant);
-            
-            Parallel.ForEach(GetBatches(dailyOffers), offers =>
+
+            try
             {
-                Database.Save(offers.ToArray());
-            });
+                DailyOfferCreationService.Save(user, dailyOffers.ToArray());
+            }
+            catch (Exception e)
+            {
+                log.FatalFormat(e.Message);
+                log.FatalFormat(e.StackTrace);
+                throw;
+            }
 
             log.DebugFormat("Finished saving deals for <{0}>.", merchant);
         }
 
-        private static void SaveOffers(MERCHANT merchant, Func<string, MERCHANT, IEnumerable<DailyOffer>> callback, string file)
+        private static void SaveOffers(wp_user user, MERCHANT merchant, Func<string, MERCHANT, IEnumerable<DailyOffer>> callback, string file)
         {
             log.DebugFormat("Getting deals for <{0}>.", merchant);
             var dailyOffers = callback(file, merchant);
             log.DebugFormat("Parsing deals for <{0}>.", merchant);
-            SaveOffers(dailyOffers, merchant);
+            SaveOffers(user, dailyOffers, merchant);
         }
 
-        private static void SaveShops(IEnumerable<Shop> shops, MERCHANT merchant)
+        private static void SaveShops(wp_user user, IEnumerable<Shop> shops, MERCHANT merchant)
         {
-            log.DebugFormat("Saving redemption locations for <{0}>.", merchant);
+            log.DebugFormat("Saving shops for <{0}>.", merchant);
 
-            Parallel.ForEach(GetBatches(shops), locations =>
-            {
-                Database.Save(locations.ToArray());
-            });
-
-            log.DebugFormat("Finished saving redemption locations for <{0}>.", merchant);
+            ShopCreationService.Save(user, shops.ToArray());
+            
+            log.DebugFormat("Finished saving shops for <{0}>.", merchant);
         }
 
-        private static void SaveShops(MERCHANT merchant, Func<string, MERCHANT, IEnumerable<Shop>> callback, string file)
+        private static void SaveShops(wp_user user, MERCHANT merchant, Func<string, MERCHANT, IEnumerable<Shop>> callback, string file)
         {
-            log.DebugFormat("Getting redemption locations for <{0}>.", merchant);
+            log.DebugFormat("Getting shops for <{0}>.", merchant);
             var shops = callback(file, merchant);
-            log.DebugFormat("Parsing redemption locations for <{0}>.", merchant);
-            SaveShops(shops, merchant);
+            log.DebugFormat("Parsing shops for <{0}>.", merchant);
+            SaveShops(user, shops, merchant);
         }
 
         private static string Download(MERCHANT merchant, Func<MERCHANT, string> getDataFeed)
@@ -97,6 +106,6 @@ namespace Couponer.Tasks.Services
             return batchSize;
         }
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(Provider));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AbstractProvider));
     }
 }

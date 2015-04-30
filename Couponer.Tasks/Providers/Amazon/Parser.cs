@@ -11,46 +11,77 @@ using Newtonsoft.Json.Linq;
 
 namespace Couponer.Tasks.Providers.Amazon
 {
-    class Parser
+    public class Parser
     {
         public static IEnumerable<Shop> GetShops(string file, MERCHANT merchant)
         {
             var doc = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(file));
 
-            return doc["deals"].Select(deal => new Shop
+            var deals = doc["deals"];
+
+            foreach (var deal in deals)
             {
-                Source = "AMAZON",
-                Longitude =  null,
-                Latitude = null,
-                PostalCode = null,
-                PhoneNumber = null,
-                Geography = null, 
-                OfferName = null,
-                StateOrProvince = null,
-                Street1 = null,
-                Street2 = null
-            });
+                var counter = 0;
+
+                foreach (var location in deal.SelectToken("redemptionLocations"))
+                {
+                    var shop = new Shop
+                    {
+                        Source = "AMAZON",
+                        Longitude = GetProperty(location, "longitude"),
+                        Latitude =  GetProperty(location, "latitude"),
+                        PostalCode = GetProperty(location, "addressPostalCode"),
+                        PhoneNumber = GetProperty(location, "phoneNumber"),
+                        Geography = GetProperty(location, "geography.displayName"),
+                        UniqueId = GetProperty(deal, "asin") + "/SHOP/" + counter,
+                        StateOrProvince = GetProperty(location, "addressStateOrProvince"),
+                        Street1 = GetProperty(location, "addressStreet1"),
+                        Street2 = GetProperty(location, "addressStreet2"),
+                    };
+
+
+                    counter++;
+
+                    yield return shop;
+                }
+            }
+
+          
         }
 
         public static IEnumerable<DailyOffer> GetDeals(string file, MERCHANT merchant)
         {
             var doc = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(file));
 
-            return doc["deals"].Select(deal => new DailyOffer
+            var deals = doc["deals"];
+
+            foreach (var deal in deals)
             {
-                Title = GetProperty(deal, "websiteTitle"),
-                Description = GetProperty(deal, "description"),
-                ImageUrl = GetProperty(deal, "imageUrl"),
-                FinePrint = GetProperty(deal, "finePrint"),
-                Price = GetProperty(deal.SelectToken("options")[0], "price.amountInBaseUnit"),
-                Value = GetProperty(deal.SelectToken("options")[0], "value.amountInBaseUnit"),
-                Source = merchant.ToString(),
-                UniqueId = GetProperty(deal, "asin"),
-                OfferEndTime = new DateTime(long.Parse(GetProperty(deal, "offerEndTime")) / 1000).ToString(),
-                Merchant = GetProperty(deal, "merchant.displayName"),
-                Products = new List<string> {GetProperty(deal, "category.name")},
-                Geographies = deal.SelectToken("geographies").Select(x => x.SelectToken("displayName").Value<String>())
-            });
+                var counter = 0;
+
+                foreach (var option in deal.SelectToken("options"))
+                {
+                    var dailyOffer = new AmazonDailyOffer
+                    {
+                        Title = GetProperty(option, "title"),
+                        Description = GetProperty(deal, "description"),
+                        ImageUrl = GetProperty(deal, "imageUrl"),
+                        FinePrint = GetProperty(deal, "finePrint"),
+                        Price = GetProperty(option, "price.amountInBaseUnit"),
+                        Value = GetProperty(option, "value.amountInBaseUnit"),
+                        Source = merchant.ToString(),
+                        UniqueId = GetProperty(deal, "asin") + "/CODE/" + counter,
+                        OfferEndTime = new DateTime(long.Parse(GetProperty(deal, "offerEndTime")) / 1000).ToString(),
+                        Merchant = GetProperty(deal, "merchant.displayName"),
+                        Products = new List<string> { GetProperty(deal, "category.name") },
+                        Geographies = deal.SelectToken("geographies").Select(x => x.SelectToken("displayName").Value<String>())
+                    };
+
+                    counter ++;
+
+                    yield return dailyOffer;
+                }
+            }
         }
 
         private static string GetProperty(JToken deal, string path)

@@ -16,8 +16,19 @@ namespace Couponer.Tasks.Providers.ShopWindow
             var doc = XDocument.Load(fileContents);
             return from product in doc.Descendants("prod")
                    where product.Attribute("in_stock").Value == "yes"
-                   select new DailyOffer
+                   select new ShopWindowDailyOffer
                    {
+                       Language = GetAttribute(product, "lang"),
+                       AWThumb = GetChild(product, "awThumb"),
+                       MerchantThumbnail = GetChild(product, "mThumb"),
+                       MerchantLink = GetChild(product, "mLink"),
+                       MerchantImage = GetChild(product, "mImage"),
+                       WebOffer = GetAttribute(product, "web_offer"),
+                       InStock = GetAttribute(product, "in_stock"),
+                       StockQuantity = GetAttribute(product, "stock_quantity"),
+                       ProductMerchantId = GetChild(product, "pId"),
+                       PreOrder = GetAttribute(product, "pre_order"),
+                       BrandName = GetChild(product, "brandName"),
                        Description = GetChild(product, "desc"),
                        Warranty = GetChild(product, "warranty"),
                        Spec = GetChild(product, "spec"),
@@ -29,14 +40,20 @@ namespace Couponer.Tasks.Providers.ShopWindow
                        UniqueId = product.Attribute("id").Value,
                        OfferEndTime = GetChild(product, "valTo"),
                        OfferStartTime = GetChild(product, "valFrom"),
-                       BuyNow = GetChild(product, "buynow"),
-                       Store = GetChild(product, "store"),
-                       RRP = GetChild(product, "rrp"),
+                       BuyNowPrice = GetChild(product, "buynow"),
+                       StorePrice = GetChild(product, "store"),
+                       RecommendedRetailPrice = GetChild(product, "rrp"),
                        Delivery = GetChild(product, "delivery"),
                        PurchaseUrl = GetChild(product, "awTrack"),
                        Value = GetValue(product),
                        Products = new List<string> { GetChild(product, "awCat").Replace("&", "and") }
                    };
+        }
+
+        static string GetAttribute(XElement product, string name)
+        {
+            var attribute = product.Attributes(name).FirstOrDefault();
+            return attribute != null ? attribute.Value : null;
         }
 
         public static string GetValue(XContainer product)
